@@ -1,0 +1,16 @@
+#!/usr/bin/sh
+URL=https://export.arxiv.org/api/query?search_query=all:
+query=`echo $* | sed 's/\ /+/g'`
+
+echo "Paper titles"
+curl -s $URL$query \
+    | grep -E '<(title|/title)>' \
+    | sed -e 's/<title>//' -e 's/\    /*\ /' -e 's#</title>##' \
+    | grep -v '<title type="html"'
+
+echo "\nPaper sites"
+curl -s $URL$query \
+    | grep -e '<link href' \
+    | sed -e 's/<link href=//' -e 's/\ rel.*//' \
+    | grep '/abs/'
+#echo $links
