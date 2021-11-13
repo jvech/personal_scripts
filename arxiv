@@ -1,8 +1,18 @@
 #!/usr/bin/sh
 font="Ubuntu-mono"
 URL=https://export.arxiv.org/api/query?search_query=all:
+
 query=`echo | dmenu -p "Search Paper" -fn $font`
 query=`echo $query | sed 's/\ /+/g'`
+
+case $query in
+    "")
+        echo "Program Finished"
+        exit
+        ;;
+    *)
+        ;;
+esac
 
 result=`curl -s $URL$query`
 titles="$(echo $result | sed 's#</title>#</title>\n#g' | sed -e 's#.*<title>\(.*\)</title>.*#\1#')"
