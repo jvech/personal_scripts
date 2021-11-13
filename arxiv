@@ -1,16 +1,22 @@
 #!/usr/bin/sh
+font="Ubuntu-mono"
 URL=https://export.arxiv.org/api/query?search_query=all:
-query=`echo $* | sed 's/\ /+/g'`
+query=`echo | dmenu -p "Search Paper" -fn $font`
+query=`echo $query | sed 's/\ /+/g'`
 
 result=`curl -s $URL$query`
-titles="$(echo $result | sed 's#</title>#</title>\n#g' | sed -e 's#.*<title>\(.*\)</title>.*#\    \1#')"
+titles="$(echo $result | sed 's#</title>#</title>\n#g' | sed -e 's#.*<title>\(.*\)</title>.*#\1#')"
 
-echo "Titles"
-echo "$titles" | grep -vE '(<summary> |<?xml )'
+title=`echo "$titles" \
+        | grep -vE '(<summary> |<?xml )' \
+        | dmenu -p "Papers" -fn $font -l 5`
 
-echo "\nLinks"
-echo "$result" \
-    | grep -e '<link href' \
-    | sed -e 's/<link href=//' -e 's/\ rel.*//' \
-    | grep '/abs/' | sed 's/"//g' \
-    | sed 's/abs/pdf/'
+url=`echo $result \
+    | sed -e 's/<title>/\n<title>/g' \
+    | grep -e "${title}" \
+    | sed -e 's#.*<link href="\(.*\)" rel=.*/>#\1#' \
+    | sed -e 's/".*//' \
+    | sed -e 's/http/https/' -e 's/abs/pdf/'`
+
+pdf_file="/tmp/arxiv_paper.pdf"
+curl -s  --compressed "$url.pdf" -o "$pdf_file" && xdg-open $pdf_file
