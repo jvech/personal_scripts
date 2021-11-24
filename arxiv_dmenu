@@ -14,12 +14,12 @@ case $query in
         ;;
 esac
 
-result=`curl -s $URL$query`
+result=`curl -s $URL$query"&max_results=50&sortBy=relevance"`
 titles="$(echo $result | sed 's#</title>#</title>\n#g' | sed -e 's#.*<title>\(.*\)</title>.*#\1#')"
 
 title=`echo "$titles" \
         | grep -vE '(<summary> |<?xml )' \
-        | dmenu -p "Papers" -fn $font -l 5`
+        | dmenu -i -p "Papers" -fn $font -l 5`
 
 url=`echo $result \
     | sed -e 's/<title>/\n<title>/g' \
@@ -28,5 +28,6 @@ url=`echo $result \
     | sed -e 's/".*//' \
     | sed -e 's/http/https/' -e 's/abs/pdf/'`
 
-pdf_file="/tmp/arxiv_paper.pdf"
+random=$$
+pdf_file="/tmp/arxiv_$random.pdf"
 curl -s  --compressed "$url.pdf" -o "$pdf_file" && xdg-open $pdf_file
