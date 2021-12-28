@@ -26,7 +26,15 @@ make uninstall
 
 # Scripts
 ## arxiv\_dmenu
-A little script to search for papers using dmenu and arxiv API
+A little script to search for papers using dmenu and arxiv API. Run the script
+in the terminal as follow:
 ```
 ./arxiv_dmenu
+```
+
+## pdf\_streamer
+Watch online pdfs using its _url_, it's recommended to have zathura as your
+default pdf viewer if you want to see it from your terminal.
+```
+./pdf_streamer https://url/file.pdf
 ```

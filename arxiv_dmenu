@@ -30,4 +30,4 @@ url=`echo $result \
 
 random=$$
 pdf_file="/tmp/arxiv_$random.pdf"
-curl -s  --compressed "$url.pdf" -o "$pdf_file" && xdg-open $pdf_file
+curl --compressed "$url.pdf" -o "$pdf_file" && xdg-open $pdf_file

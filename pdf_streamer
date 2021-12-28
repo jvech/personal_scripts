@@ -1,0 +1,5 @@
+#!/usr/bin/sh
+random=$$
+url=$1
+pdf_file="/tmp/pdfstream_$random.pdf"
+curl "$url" -o "$pdf_file" && xdg-open $pdf_file
