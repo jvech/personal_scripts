@@ -1,4 +1,4 @@
-SCRIPTS=arxiv_dmenu pdf_streamer
+SCRIPTS=arxiv_dmenu pdf_streamer ytdl.sh
 install:
 	cp $(SCRIPTS) ~/.local/bin/
 
